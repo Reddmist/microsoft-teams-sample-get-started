@@ -20,6 +20,10 @@ function start_listening() {
 		files.sendFile('./tabs/about.html', res);
 	});
 
+	this.server.get('tabs/mytabs', (req, res, next) => {
+		files.sendFile('./tabs/mytabs.html', res);
+	});
+
 	this.server.get('tabs/configure', (req, res, next) => {
 		files.sendFileOrLogin('./tabs/configure.html', req, res, next);
 	});

@@ -41,6 +41,15 @@
             "scopes": [
                 "personal"
             ]
+        },
+        {
+            "entityId": "mytabs",
+            "name": "My Tabs",
+            "contentUrl": "[https://YourHostURL.ext]/tabs/mytabs",
+            "websiteUrl": "[https://YourHostURL.ext]/tabs/mytabs?web=1",
+            "scopes": [
+                "personal"
+            ]
         }
     ],
     "configurableTabs": [
