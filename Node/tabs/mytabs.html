@@ -166,18 +166,24 @@
 			if (!microsoftTeams.getTabInstances) {
 				$('#todos_header').html(`<h1>Please update Microsoft Teams JS SDK</h1>`);
 			} else {
-				// Get all the tabs used by this app
+				
+				let curDate = new Date();
+
+				let element = document.getElementById("todos_container");
+				element.innerHTML = "Started call at " + curDate.toISOString() + "<br/><br/>";
 				microsoftTeams.getTabInstances((tabInfo) => {
-					let element = document.getElementById("todos_container");
 					let list = tabInfo.teamTabs;
 					if (!list.length) {
-						element.innerText = "No tabs found!";
+						element.innerText += "No tabs found!";
 					}
 
 					for (let index = 0; index < list.length; ++index) {
 					  item = list[index];
-					  element.innerHTML = element.innerHTML + JSON.stringify(item) + "<br/>";
+					  element.innerHTML += JSON.stringify(item) + "<br/>";
 					};
+
+					curDate = new Date();
+					element.innerHTML += "<br/><br/>Ended call at " + curDate.toISOString();
 				});
 			}
 		}
