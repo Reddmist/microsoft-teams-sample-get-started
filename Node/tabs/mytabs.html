@@ -2,7 +2,7 @@
 
 <head>
 	<title>Sample App My Tabs</title>
-	<script src="https://statics.teams.microsoft.com/sdk/v1.0/js/MicrosoftTeams.min.js?temp"></script>
+	<script src="https://statics.teams.microsoft.com/sdk/v1.0/js/MicrosoftTeams.min.js?nonce=1"></script>
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
 	<style type="text/css">
 		body {
@@ -166,7 +166,7 @@
 			if (!microsoftTeams.getTabInstances) {
 				$('#todos_header').html(`<h1>Please update Microsoft Teams JS SDK</h1>`);
 			} else {
-				
+
 				let curDate = new Date();
 
 				let element = document.getElementById("todos_container");
@@ -178,12 +178,20 @@
 					}
 
 					for (let index = 0; index < list.length; ++index) {
-					  item = list[index];
-					  element.innerHTML += JSON.stringify(item) + "<br/>";
+						item = list[index];
+						element.innerHTML += JSON.stringify(item) + "<br/>";
 					};
 
 					curDate = new Date();
 					element.innerHTML += "<br/><br/>Ended call at " + curDate.toISOString();
+
+					// let's also return the context
+					microsoftTeams.getContext((context) => {
+						element.innerHTML += "<br/><br/>Context " + JSON.stringify(context) + "<br/>";
+					});
+				}, {
+					favoriteChannelsOnly: false,
+					favoriteTeamsOnly: false,
 				});
 			}
 		}
