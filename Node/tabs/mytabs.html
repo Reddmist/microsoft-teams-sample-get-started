@@ -180,7 +180,7 @@
 </head>
 
 <body>
-	<div id="todos_header">My Channel Tabs</div>
+	<div id="todos_header">My Channel Tabs (fetching your tabs)</div>
 	<div id="todos_container"></div>
 	<div id="todos_loading">
 		<ul class="tabs loading">
@@ -218,13 +218,13 @@
 		$('#todos_not_found').hide();
 
 		if (web) {
-			$('#todos_header').html(`<h1>Task Tracker</h1>`);
+			$('#todos_header').html(`My Channel Tabs (try this on Microsoft Teams)`);
 		} else {
 			// Page is inside Microsoft Teams tab.  Don't show the page header/navigation.
 			microsoftTeams.initialize();
 
 			if (!microsoftTeams.getTabInstances) {
-				$('#todos_header').html(`<h1>Please update Microsoft Teams JS SDK</h1>`);
+				$('#todos_header').html(`My Channel Tabs (please update to the latest Tabs SDK)`);
 				$('#todos_loading').hide();
 			} else {
 
@@ -239,6 +239,7 @@
 						$('#todos_loading').hide();
 						$('#todos_not_found').show().removeClass('hidden');
 						$('#todos_container').hide();
+						$('#todos_header').html(`My Channel Tabs (you've not pinned any tabs. Go an pin some tabs to your channels)`);
 						return;
 					}
 
@@ -269,6 +270,7 @@
 					tabsHTML += `</ul>`;
 
 					$('#todos_container').html(tabsHTML);
+					$('#todos_header').html(`My Channel Tabs (found ${list.length} tab(s)`);
 
 					$('#todos_loading').hide();
 					$('#todos_not_found').hide();
