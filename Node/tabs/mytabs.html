@@ -2,7 +2,7 @@
 
 <head>
 	<title>Sample App My Tabs</title>
-	<script src="https://statics.teams.microsoft.com/sdk/v1.0/js/MicrosoftTeams.min.js?nonce=1"></script>
+	<script src="https://statics.teams.microsoft.com/sdk/v1.0/js/MicrosoftTeams.min.js?nonce=2"></script>
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
 	<style type="text/css">
 		body {
@@ -14,7 +14,7 @@
 		}
 
 		#todos_header {
-			padding: 1% 1% 0.5%;
+			padding: 1% 1% 1% 0;
 			display: flex;
 			min-width: 800px;
 			font-family: 'Segoe UI Bold', sans-serif;
@@ -25,102 +25,30 @@
 
 		#todos_container {
 			margin: 0;
-			padding: 1% 1% 0.5%;
+			padding: 0;
 			display: flex;
-			width: 96%;
-			height: 90%;
+			width: 100%;
 			min-width: 800px;
 		}
 
-		.day {
-			height: 100%;
-			width: 20%;
-			padding: 0 30px;
-			list-style: none;
-			width: 250px;
-		}
-
-		.day.center {
-			margin: 0 auto;
-		}
-
-		.day li {
-			margin-bottom: 30px;
-		}
-
-		.title {
-			font-family: 'Segoe UI Bold', sans-serif;
-			font-size: 200%;
-			color: #3F487F;
-		}
-
-		.task {
-			min-height: 75px;
-			padding: 20px 20px 10px 20px;
-			background: #FFFFFF;
-			cursor: -webkit-grab;
-			box-shadow: 0 0 45px #DDD;
-			border-radius: 5px;
-			border: 3px solid transparent;
-			width: 200px;
-		}
-
-		.task.selected {
-			box-shadow: 0 0 25px #999;
-			border: 3px solid #cc0000;
-		}
-
-		.task:hover {
-			box-shadow: 0 0 45px #999;
-		}
-
-		.task h3 {
-			font-family: 'Segoe UI Black', sans-serif;
-			color: #1d3470;
-			font-size: 12px;
-			border-bottom: 1px solid #ccc;
-		}
-
-		.task h3 {
-			padding: 0 0 8px 0;
-			margin: 0;
-		}
-
-		.task p {
-			padding: 0;
-			margin: 7px 0;
-			font-family: 'Segoe UI Light', sans-serif;
-		}
-
-		.task p.assigned {
-			font-family: 'Segoe UI Regular', sans-serif;
-		}
-
-		.task p.id {
-			color: #CC0000;
-			font-family: 'Segoe UI Black';
-			text-align: right;
-			margin: 0;
-			font-size: 9px;
-		}
-
-		.task p.getlink {
-			color: #1d3470;
-			font-family: 'Segoe UI Black';
-			text-align: right;
-			margin: 0;
-			font-size: 9px;
-			cursor: pointer;
-		}
-
-		.task .image {
+		div#todos_loading {
+			position: fixed;
+			top: 40px;
+			display: flex;
 			width: 100%;
-			height: 110px;
-			margin: 25px 0;
-			background-size: cover;
-			border-radius: 10px;
-			background-position: center;
+		}
+
+		div#todos_not_found {
+			position: fixed;
+			top: 40px;
+			display: flex;
+			width: 100%;
+			height: 90vh;
+			background-image: url(/static/img/not_found.png);
+			background-size: contain;
 			background-repeat: no-repeat;
+			background-position: center;
+			transition: all .3s ease-out;
 		}
 
 		#todos_signin {
@@ -131,12 +59,142 @@
 			min-height: 16px;
 			margin: 16px 16px;
 		}
+
+		#todos_console {
+			position: fixed;
+			width: 100%;
+			height: 20vh;
+			bottom: 0;
+			overflow-y: scroll;
+			background: #222;
+			border-radius: 5px;
+			color: wheat;
+			padding: 5px 0;
+			opacity: 0.8;
+			display: none;
+		}
+		
+		#todos_console p{
+			padding: 10px 30px;
+		}
+
+		#todos_console p:nth-child(even) {
+			background: #000;			
+		}
+
+		ul.tabs {
+			list-style: none;
+			display: flex;
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			flex-wrap: wrap;
+		}
+
+		ul.tabs li.tab {
+			background: white;
+			width: 300px;
+			height: 85px;
+			padding: 18px 25px;
+			margin: 0 10px 10px 0;
+			border-radius: 3px;
+			transition: all .3s ease-out;
+		}
+
+		.hidden{
+			transform: translateY(20px);
+			opacity: 0;
+		}
+
+		ul.tabs li.tab .row {
+			position: relative;
+		}
+
+		.row.buttons {
+			position: absolute;
+			top: 15px;
+			left: 0;
+		}
+
+		.row.buttons a {
+			padding: 5px 15px 5px 0;
+			border-radius: 3px;
+			color: #3F487F;
+			text-decoration: none;
+		}
+
+		.row.buttons a:hover{
+			text-decoration: underline;
+		}
+
+		ul.tabs li.tab .image {
+			width: 50px;
+			height: 50px;
+			background-size: contain;
+			border-radius: 4px;
+			display: inline-block;
+		}
+
+		p.info {
+			display: inline-block;
+			padding: 0 0 0 17px;
+			margin: 0;
+			position: absolute;
+			font-family: 'Segoe UI Black';
+			font-size: 10px;
+			top: 4px;
+			color: #3F487F;
+		}
+
+		h3.title {
+			display: inline-block;
+			padding: 0 0 0 15px;
+			margin: 0;
+			position: absolute;
+			top: 18px;
+			font-family: 'Segoe UI Light';
+			font-size: 22px;
+		}
+
+		@keyframes loadingAnimation {
+			0% {
+				opacity: 0.3;
+			}
+			50% {
+				opacity: 1;
+			}
+			100% {
+				opacity: 0.3;
+			}
+		}
+
+		ul.tabs.loading li.tab {
+			background: #E5e5e5;
+			animation-duration: 5s;
+			animation-iteration-count: infinite;
+			animation-name: loadingAnimation;
+			animation-timing-function: linear;
+		}
+
 	</style>
 </head>
 
 <body>
-	<div id="todos_header"></div>
+	<div id="todos_header">My Channel Tabs</div>
 	<div id="todos_container"></div>
+	<div id="todos_loading">
+		<ul class="tabs loading">
+			<li class="tab"></li>
+			<li class="tab"></li>
+			<li class="tab"></li>
+			<li class="tab"></li>
+			<li class="tab"></li>
+			<li class="tab"></li>
+			<li class="tab"></li>			
+		</ul>
+	</div>
+	<div id="todos_not_found" class="hidden"></div>
+	<div id="todos_console"></div>
 
 	<script type="text/javascript">
 		// Gets URL parameters
@@ -156,6 +214,8 @@
 		var color = getURLParam('color') || '#fffad1';
 
 		var host = `https://${window.location.hostname}`;
+		$('#todos_container').hide();
+		$('#todos_not_found').hide();
 
 		if (web) {
 			$('#todos_header').html(`<h1>Task Tracker</h1>`);
@@ -165,29 +225,70 @@
 
 			if (!microsoftTeams.getTabInstances) {
 				$('#todos_header').html(`<h1>Please update Microsoft Teams JS SDK</h1>`);
+				$('#todos_loading').hide();
 			} else {
 
 				let curDate = new Date();
 
-				let element = document.getElementById("todos_container");
-				element.innerHTML = "Started call at " + curDate.toISOString() + "<br/><br/>";
+				$('#todos_console').append(`<p>Started call at ${curDate.toISOString()}</p>`);
+
 				microsoftTeams.getTabInstances((tabInfo) => {
 					let list = tabInfo.teamTabs;
 					if (!list.length) {
-						element.innerText += "No tabs found!";
+						$('#todos_console').append(`<p>No tabs found</p>`);
+						$('#todos_loading').hide();
+						$('#todos_not_found').show().removeClass('hidden');
+						$('#todos_container').hide();
+						return;
 					}
+
+					var tabsHTML = `<ul class="tabs">`;
 
 					for (let index = 0; index < list.length; ++index) {
 						item = list[index];
-						element.innerHTML += JSON.stringify(item) + "<br/>";
-					};
+						$('#todos_console').append(`<p>${JSON.stringify(item, null, 2)}</p>`);
 
-					curDate = new Date();
-					element.innerHTML += "<br/><br/>Ended call at " + curDate.toISOString();
+						var image = `${host}/static/img/image${Math.floor(Math.random() * 9) + 1}.png`;
+						var taskHTML = `
+								<li class="tab hidden">
+									<div class="row">
+										<div class="image" style="background-image: url(${image});"></div>	
+										<p class="info">${decodeURIComponent(item.teamName)} > ${decodeURIComponent(item.channelName)}</p>
+										<h3 class="title">${decodeURIComponent(item.tabName)}</h3>										
+									</div>							
+									<div class="row buttons">					
+										<a href="${item.url}">Go to tab</a>
+										<a href="${item.websiteUrl}">Go to website</a>
+									</div>
+								</li>
+							`;
+						
+							tabsHTML += taskHTML;
+					}
+
+					tabsHTML += `</ul>`;
+
+					$('#todos_container').html(tabsHTML);
+
+					$('#todos_loading').hide();
+					$('#todos_not_found').hide();
+					$('#todos_container').show();
+
+					var i = 0;
+					$('li.tab').each(function(){
+						var that = $(this);
+						setTimeout(function(){
+							that.removeClass('hidden');
+						}, 100*i++);
+					});
+
+					let curDate2 = new Date();
+					$('#todos_console').append(`<p>Ended call at ${curDate2.toISOString()}</p>`);
+					$('#todos_console').append(`<p>Time Ellapsed ${curDate2 - curDate}ms</p>`);
 
 					// let's also return the context
 					microsoftTeams.getContext((context) => {
-						element.innerHTML += "<br/><br/>Context " + JSON.stringify(context) + "<br/>";
+						$('#todos_console').append(`<p>Context ${JSON.stringify(context, null, 2)}</p>`);
 					});
 				}, {
 					favoriteChannelsOnly: false,
