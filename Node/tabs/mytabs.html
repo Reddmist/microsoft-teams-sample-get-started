@@ -216,6 +216,18 @@
 			animation-timing-function: linear;
 		}
 
+		span.favorite.true {
+			font-size: 12px;
+			display: inline-block;
+			color: #fcd844;
+			text-shadow: 0 0 1px #e5c339;
+			margin: 0px 0px 0px 3px;
+		}
+
+		span.favorite.false{
+			display: none;
+		}
+
 	</style>
 </head>
 
@@ -333,19 +345,17 @@
 
 						var image = `${host}/static/img/image${Math.floor(Math.random() * 9) + 1}.png`;
 
-						let tabClass = "tab hidden " + (item.channelIsFavorite ? "favorite" : "");
-
 						var taskHTML = `
-								<li class="${tabClass}">
+								<li class="tab hidden">
 									<div class="row">
 										<div class="image" style="background-image: url(${image});"></div>	
-										<p class="info">${decodeURIComponent(item.teamName)} > ${decodeURIComponent(item.channelName)}</p>
+										<p class="info">${decodeURIComponent(item.teamName)} > ${decodeURIComponent(item.channelName)}<span alt="This tab is pinned to a favorited channel" class="favorite ${item.channelIsFavorite}">&#9733;</span></p>
 										<h3 class="title">${decodeURIComponent(item.tabName)}</h3>										
 									</div>							
 									<div class="row buttons">					
 										<a data-item-id="${index}" onclick="navigateToTab(${index});" href="#">Go to tab</a>
 										<a href="#" onClick="window.open('${item.websiteUrl}', '_blank');">Go to website</a>
-										<a data-item-id="${index}" onclick="openInStage('${item.websiteUrl}');" href="#">Open Inline</a>
+										<a data-item-id="${index}" onclick="openInStage('${item.url}');" href="#">Open Inline</a>
 									</div>
 								</li>
 							`;
