@@ -137,6 +137,10 @@
 			transition: all .3s ease-out;
 		}
 
+		ul.tabs li.tab.favorite {
+			border: solid 2px yellow;
+		}
+
 		.hidden{
 			transform: translateY(20px);
 			opacity: 0;
@@ -328,8 +332,11 @@
 						$('#todos_console').append(`<p>${JSON.stringify(item, null, 2)}</p>`);
 
 						var image = `${host}/static/img/image${Math.floor(Math.random() * 9) + 1}.png`;
+
+						let tabClass = "tab hidden " + (item.channelIsFavorite ? "favorite" : "");
+
 						var taskHTML = `
-								<li class="tab hidden">
+								<li class="${tabClass}">
 									<div class="row">
 										<div class="image" style="background-image: url(${image});"></div>	
 										<p class="info">${decodeURIComponent(item.teamName)} > ${decodeURIComponent(item.channelName)}</p>
