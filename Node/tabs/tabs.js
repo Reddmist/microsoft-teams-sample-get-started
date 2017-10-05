@@ -24,6 +24,10 @@ function start_listening() {
 		files.sendFile('./tabs/mytabs.html', res);
 	});
 
+	this.server.get('tabs/mymru', (req, res, next) => {
+		files.sendFile('./tabs/mymru.html', res);
+	});
+
 	this.server.get('tabs/configure', (req, res, next) => {
 		files.sendFileOrLogin('./tabs/configure.html', req, res, next);
 	});
