@@ -284,15 +284,15 @@
 
 					let curDate2 = new Date();
 					$('#todos_console').append(`<p>Ended call at ${curDate2.toISOString()}</p>`);
-					$('#todos_console').append(`<p>Time Ellapsed ${curDate2 - curDate}ms</p>`);
+					$('#todos_console').append(`<p>Time Elapsed ${curDate2 - curDate}ms</p>`);
 
 					// let's also return the context
 					microsoftTeams.getContext((context) => {
 						$('#todos_console').append(`<p>Context ${JSON.stringify(context, null, 2)}</p>`);
 					});
 				}, {
-					favoriteChannelsOnly: true,
-					favoriteTeamsOnly: true,
+					favoriteChannelsOnly: false,
+					favoriteTeamsOnly: false,
 				});
 			}
 		}
