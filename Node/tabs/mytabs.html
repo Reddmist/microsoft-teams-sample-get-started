@@ -38,6 +38,42 @@
 			width: 100%;
 		}
 
+		div#todos_stage_div {
+			position: fixed;
+			top: 0px;
+			display: flex;
+			width: 100%;
+			height: 100%;
+			background: white;
+			flex-direction: column;
+			transition: all 200ms cubic-bezier(.33,.14,.42,1.1);
+		}
+
+		div#todos_stage_div.hidden{
+			transform: translateY(25vh);
+			opacity: 0;
+		}
+
+		div#todos_stage_close {
+			background: #e8f0ff;
+			padding: 5px;
+			text-align: center;
+			font-family: 'Segoe UI Black';
+			cursor: pointer;
+		}
+
+		div#todos_stage_close:hover{
+			background: #d7e0f2;
+		}
+
+		iframe#todos_stage_iframe {
+			width: 100%;
+			height: 100%;
+			border: none;
+			padding: 0;
+			margin: 0;
+		}
+
 		div#todos_not_found {
 			position: fixed;
 			top: 40px;
@@ -170,7 +206,7 @@
 
 		ul.tabs.loading li.tab {
 			background: #E5e5e5;
-			animation-duration: 5s;
+			animation-duration: 2.5s;
 			animation-iteration-count: infinite;
 			animation-name: loadingAnimation;
 			animation-timing-function: linear;
@@ -180,7 +216,7 @@
 </head>
 
 <body>
-	<div id="todos_header">My Channel Tabs</div>
+	<div id="todos_header">My Channel Tabs (fetching your tabs)</div>
 	<div id="todos_container"></div>
 	<div id="todos_loading">
 		<ul class="tabs loading">
@@ -194,6 +230,11 @@
 		</ul>
 	</div>
 	<div id="todos_not_found" class="hidden"></div>
+	<div id="todos_stage_div" class="hidden">
+		<div id="todos_stage_close">close</div>
+		<iframe id="todos_stage_iframe"></iframe>
+	</div>
+
 	<div id="todos_console"></div>
 
 	<script type="text/javascript">
@@ -209,22 +250,59 @@
 			}
 		}
 
+		function navigateToTab(index){
+			try{
+				microsoftTeams.navigateToTab(list[index]);
+			}
+			catch(e){
+				$('#todos_console').append(`<p>Could not navigate ${e.message}</p>`);
+			}
+		}
+
+		function openInStage(url){
+
+			try{
+				$('#todos_stage_iframe').attr('src', url);
+				$('#todos_stage_div').show().removeClass('hidden');
+			}
+			catch(e){
+				$('#todos_console').append(`<p>Could not open stage ${e.message}</p>`);
+			}
+			
+		}
+
+		$('#todos_stage_close').on('click', function(){
+			try{
+				$('#todos_stage_div').show().addClass('hidden');
+				setTimeout(function(){
+					$('#todos_stage_iframe').attr('src', null);
+					$('#todos_stage_div').hide();
+				}, 300);
+				
+			}
+			catch(e){
+				$('#todos_console').append(`<p>Could not open stage ${e.message}</p>`);
+			}
+		});
+
 		var web = getURLParam('web');
 		var auth = getURLParam('auth');
 		var color = getURLParam('color') || '#fffad1';
+		var list = {};
 
 		var host = `https://${window.location.hostname}`;
 		$('#todos_container').hide();
 		$('#todos_not_found').hide();
+		$('#todos_stage_div').hide();
 
 		if (web) {
-			$('#todos_header').html(`<h1>Task Tracker</h1>`);
+			$('#todos_header').html(`My Channel Tabs (try this on Microsoft Teams)`);
 		} else {
 			// Page is inside Microsoft Teams tab.  Don't show the page header/navigation.
 			microsoftTeams.initialize();
 
 			if (!microsoftTeams.getTabInstances) {
-				$('#todos_header').html(`<h1>Please update Microsoft Teams JS SDK</h1>`);
+				$('#todos_header').html(`My Channel Tabs (please update to the latest Tabs SDK)`);
 				$('#todos_loading').hide();
 			} else {
 
@@ -233,12 +311,13 @@
 				$('#todos_console').append(`<p>Started call at ${curDate.toISOString()}</p>`);
 
 				microsoftTeams.getTabInstances((tabInfo) => {
-					let list = tabInfo.teamTabs;
+					list = tabInfo.teamTabs;
 					if (!list.length) {
 						$('#todos_console').append(`<p>No tabs found</p>`);
 						$('#todos_loading').hide();
 						$('#todos_not_found').show().removeClass('hidden');
 						$('#todos_container').hide();
+						$('#todos_header').html(`My Channel Tabs (you've not pinned any tabs. Go an pin some tabs to your channels)`);
 						return;
 					}
 
@@ -257,8 +336,9 @@
 										<h3 class="title">${decodeURIComponent(item.tabName)}</h3>										
 									</div>							
 									<div class="row buttons">					
-										<a href="${item.url}">Go to tab</a>
-										<a href="${item.websiteUrl}">Go to website</a>
+										<a data-item-id="${index}" onclick="navigateToTab(${index});" href="#">Go to tab</a>
+										<a href="#" onClick="window.open('${item.websiteUrl}', '_blank');">Go to website</a>
+										<a data-item-id="${index}" onclick="openInStage('${item.websiteUrl}');" href="#">Open Inline</a>
 									</div>
 								</li>
 							`;
@@ -269,6 +349,7 @@
 					tabsHTML += `</ul>`;
 
 					$('#todos_container').html(tabsHTML);
+					$('#todos_header').html(`My Channel Tabs (found ${list.length} tab(s))`);
 
 					$('#todos_loading').hide();
 					$('#todos_not_found').hide();
