@@ -239,8 +239,7 @@
 	</style>
 </head>
 
-<body>
-	<div id="todos_header">My Channel Tabs (fetching your tabs)</div>
+<body>	
 	<div id="todos_container"></div>
 	<div id="todos_loading">
 		<ul class="tabs loading">
@@ -363,7 +362,7 @@
 									<div class="row buttons">					
 										<a data-item-id="${index}" onclick="navigateToTab(${index});" href="#">Go to tab</a>
 										<a href="#" onClick="window.open('${item.websiteUrl}', '_blank');">Go to website</a>
-										<a data-item-id="${index}" onclick="openInStage('${item.url}');" href="#">Open Inline</a>
+										<a data-item-id="${index}" onclick="openInStage('${item.websiteUrl}');" href="#">Open Inline</a>
 									</div>
 								</li>
 							`;
